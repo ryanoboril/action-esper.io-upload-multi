@@ -1,0 +1,22 @@
+name: 'Publish APKs to esper.io'
+description: 'An action to publish one or more APKs to esper.io'
+author: 'ryanoboril'
+branding:
+  icon: 'upload-cloud'
+  color: 'purple'
+inputs:
+  enterpriseId:
+    description: 'Esper.io Enterprise ID'
+    required: true
+  apiKey:
+    description: 'Esper.io API Key'
+    required: true
+  files:
+    description: 'Folder containing APK files to upload, or an array of file names'
+    required: true
+outputs:
+  uploadResult:
+    description: 'Data response from esper.io after uploading the APKs'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

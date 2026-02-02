@@ -1,0 +1,47 @@
+{
+  "name": "action-esper.io-upload-multi",
+  "version": "0.0.0",
+  "description": "GitHub action used to publish one or more APKs to esper.io",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.ts -m --license licenses.txt",
+    "test": "jest",
+    "deploy": "tsc && ./update_release.sh",
+    "prettify": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryan-oboril/action-esper.io-upload-multi.git"
+  },
+  "keywords": [
+    "actions",
+    "node",
+    "setup"
+  ],
+  "license": "MIT",
+  "author": "Ryan Oboril",
+  "dependencies": {
+    "@actions/core": "1.2.6",
+    "@actions/exec": "1.0.4",
+    "@actions/io": "1.0.2",
+    "axios": "0.27.2",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "26.0.15",
+    "@types/node": "17.0.27",
+    "@vercel/ncc": "^0.33.4",
+    "eslint": "~8.14.0",
+    "jest": "26.6.3",
+    "jest-circus": "26.6.3",
+    "prettier": "2.6.2",
+    "ts-jest": "26.4.4",
+    "typescript": "4.6.4"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
+  }
+}
