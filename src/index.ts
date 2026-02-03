@@ -60,16 +60,16 @@ async function run() {
     const headers = {
       ...formData.getHeaders(),
       Authorization: `Bearer ${apiKey}`,
-      //maxBodyLength: 200 * 1024 * 1024,
-      //maxContentLength: 200 * 1024 * 1024,
+      maxBodyLength: 200 * 1024 * 1024,
+      maxContentLength: 200 * 1024 * 1024,
     };
 
     core.error(`Form Data Headers: ${JSON.stringify(headers)}`);
 
     // https://api.esper.io/tag/Application#operation/upload
-    const result = await axios.post<{
-      application: Record<string, string> | { id: string };
-    }>(url, formData, {
+    const result = await axios(url, {
+      method: 'POST',
+      data: formData,
       headers,
     });
     core.error(JSON.stringify(result));
