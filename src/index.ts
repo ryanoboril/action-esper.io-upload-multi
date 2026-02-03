@@ -72,10 +72,10 @@ async function run() {
     }>(url, formData, {
       headers,
     });
-    core.error(JSON.stringify(result, null, 2));
+    core.error(JSON.stringify(result));
     core.setOutput('uploadResult', result.data);
   } catch (err: any) {
-    core.error(JSON.stringify(err, null, 2));
+    core.error(JSON.stringify(err));
     core.setFailed(err.message);
   }
 }
