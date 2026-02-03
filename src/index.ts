@@ -9,7 +9,7 @@ const resolveWorkspace = (): string => {
   if (!workspace) {
     throw new Error('GITHUB_WORKSPACE is not set');
   }
-  core.debug(`Workspace resolved to ${workspace}`);
+  core.info(`Workspace resolved to ${workspace}`);
   return workspace;
 };
 
@@ -19,9 +19,11 @@ const resolveFilesPath = (filesInput: string): string => {
     ? filesInput
     : path.resolve(workspace, filesInput);
   if (!fs.existsSync(resolvedPath)) {
-    throw new Error(`Files directory does not exist: ${resolvedPath}`);
+    throw new Error(
+      `RYAN GITHUB ACTION FUCKING PLUGIN:     Files directory does not exist: ${resolvedPath}`,
+    );
   }
-  core.debug(`Files directory resolved to ${resolvedPath}`);
+  core.info(`Files directory resolved to ${resolvedPath}`);
   return resolvedPath;
 };
 
