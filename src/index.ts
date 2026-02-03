@@ -5,16 +5,23 @@ import * as path from 'node:path';
 import FormData = require('form-data');
 
 const resolveWorkspace = (): string => {
+  core.error(`RYAN ACTION FUCKING PLUGIN:   INSIDE FUCKING RESOLVE WORKSPACE`);
   const workspace = process.env.GITHUB_WORKSPACE;
   if (!workspace) {
     throw new Error('GITHUB_WORKSPACE is not set');
   }
-  core.info(`Workspace resolved to ${workspace}`);
+  core.error(
+    `RYAN ACTION FUCKING PLUGIN:   Workspace resolved to ${workspace}`,
+  );
   return workspace;
 };
 
 const resolveFilesPath = (filesInput: string): string => {
+  core.error(`RYAN ACTION FUCKING PLUGIN:   INSIDE FUCKING RESOLVE FILES PATH`);
   const workspace = resolveWorkspace();
+  core.error(
+    `RYAN ACTION FUCKING PLUGIN:   Workspace resolved to ${workspace}`,
+  );
   const resolvedPath = path.isAbsolute(filesInput)
     ? filesInput
     : path.resolve(workspace, filesInput);
@@ -23,7 +30,9 @@ const resolveFilesPath = (filesInput: string): string => {
       `RYAN GITHUB ACTION FUCKING PLUGIN:     Files directory does not exist: ${resolvedPath}`,
     );
   }
-  core.info(`Files directory resolved to ${resolvedPath}`);
+  core.error(
+    `RYAN ACTION FUCKING PLUGIN:   Files directory resolved to ${resolvedPath}`,
+  );
   return resolvedPath;
 };
 
@@ -33,6 +42,8 @@ async function run() {
     const tenantId = core.getInput('tenantId');
     const apiKey = core.getInput('apiKey');
     const files = core.getInput('files');
+
+    core.error(`RYAN ACTION FUCKING PLUGIN:   FUCKING FILES INPUT: ${files}`);
 
     const resolvedPath = resolveFilesPath(files);
 
