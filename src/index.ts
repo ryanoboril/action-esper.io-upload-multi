@@ -33,6 +33,7 @@ async function run() {
 
     const resolvedPath = resolveFilesPath(files);
 
+    // https://api.esper.io/tag/Application#operation/upload
     const url = `https://${tenantId}-api.esper.cloud/api/enterprise/${enterpriseId}/application/upload`;
     core.debug(`Esper.io endpoint ${url}`);
 
@@ -66,10 +67,7 @@ async function run() {
 
     core.error(`Form Data Headers: ${JSON.stringify(headers)}`);
 
-    // https://api.esper.io/tag/Application#operation/upload
-    const result = await axios(url, {
-      method: 'POST',
-      data: formData,
+    const result = await axios.post(url, formData, {
       headers,
     });
     core.error(JSON.stringify(result));
@@ -79,7 +77,7 @@ async function run() {
       core.error(`Axios error response: ${JSON.stringify(err.response?.data)}`);
     }
     core.error(JSON.stringify(err));
-    core.setFailed('it failed');
+    core.setFailed((err as Error).message);
   }
 }
 

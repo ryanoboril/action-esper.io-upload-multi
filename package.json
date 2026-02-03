@@ -22,7 +22,7 @@
     "@actions/core": "2.0.3",
     "@actions/exec": "2.0.0",
     "@actions/io": "2.0.0",
-    "axios": "1.13.4",
+    "axios": "^0.30.2",
     "form-data": "4.0.5"
   },
   "devDependencies": {
