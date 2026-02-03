@@ -5,34 +5,22 @@ import * as path from 'node:path';
 import FormData = require('form-data');
 
 const resolveWorkspace = (): string => {
-  core.error(`RYAN ACTION FUCKING PLUGIN:   INSIDE FUCKING RESOLVE WORKSPACE`);
   const workspace = process.env.GITHUB_WORKSPACE;
   if (!workspace) {
     throw new Error('GITHUB_WORKSPACE is not set');
   }
-  core.error(
-    `RYAN ACTION FUCKING PLUGIN:   Workspace resolved to ${workspace}`,
-  );
   return workspace;
 };
 
 const resolveFilesPath = (filesInput: string): string => {
-  core.error(`RYAN ACTION FUCKING PLUGIN:   INSIDE FUCKING RESOLVE FILES PATH`);
   const workspace = resolveWorkspace();
-  core.error(
-    `RYAN ACTION FUCKING PLUGIN:   Workspace resolved to ${workspace}`,
-  );
   const resolvedPath = path.isAbsolute(filesInput)
     ? filesInput
     : path.resolve(workspace, filesInput);
   if (!fs.existsSync(resolvedPath)) {
-    throw new Error(
-      `RYAN GITHUB ACTION FUCKING PLUGIN:     Files directory does not exist: ${resolvedPath}`,
-    );
+    throw new Error(`Files directory does not exist: ${resolvedPath}`);
   }
-  core.error(
-    `RYAN ACTION FUCKING PLUGIN:   Files directory resolved to ${resolvedPath}`,
-  );
+  core.error(`Files directory resolved to ${resolvedPath}`);
   return resolvedPath;
 };
 
@@ -42,8 +30,6 @@ async function run() {
     const tenantId = core.getInput('tenantId');
     const apiKey = core.getInput('apiKey');
     const files = core.getInput('files');
-
-    core.error(`RYAN ACTION FUCKING PLUGIN:   FUCKING FILES INPUT: ${files}`);
 
     const resolvedPath = resolveFilesPath(files);
 
@@ -63,7 +49,7 @@ async function run() {
         .readdirSync(resolvedPath)
         .map((fileName: string) => path.join(resolvedPath, fileName));
     }
-    core.debug(`Files to upload: ${filePaths.join(', ')}`);
+    core.error(`Files to upload: ${filePaths.join(', ')}`);
 
     const formData = new FormData();
     filePaths.forEach((filePath: string) =>
@@ -81,10 +67,10 @@ async function run() {
         maxContentLength: 200 * 1024 * 1024,
       },
     });
-    core.debug(JSON.stringify(result.data, null, 2));
+    core.error(JSON.stringify(result.data, null, 2));
     core.setOutput('uploadResult', result.data);
   } catch (err: any) {
-    core.error(err);
+    core.error(JSON.stringify(err, null, 2));
     core.setFailed(err.message);
   }
 }
