@@ -58,17 +58,22 @@ async function run() {
       formData.append(fileName, fs.createReadStream(filePath));
     });
 
-    const headers = {
-      ...formData.getHeaders(),
-      Authorization: `Bearer ${apiKey}`,
-      maxBodyLength: 200 * 1024 * 1024,
-      maxContentLength: 200 * 1024 * 1024,
-    };
+    // const headers = {
+    //   ...formData.getHeaders(),
+    //   Authorization: `Bearer ${apiKey}`,
+    //   maxBodyLength: 200 * 1024 * 1024,
+    //   maxContentLength: 200 * 1024 * 1024,
+    // };
 
-    core.error(`Form Data Headers: ${JSON.stringify(headers)}`);
+    //  core.error(`Form Data Headers: ${JSON.stringify(headers)}`);
 
     const result = await axios.post(url, formData, {
-      headers,
+      headers: {
+        ...formData.getHeaders(),
+        Authorization: `Bearer ${apiKey}`,
+        maxBodyLength: 200 * 1024 * 1024,
+        maxContentLength: 200 * 1024 * 1024,
+      },
     });
     core.error(JSON.stringify(result));
     core.setOutput('uploadResult', result.data);
