@@ -1,6 +1,6 @@
 {
   "name": "action-esper.io-upload-multi",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "GitHub action used to publish one or more APKs to esper.io",
   "main": "dist/index.js",
   "scripts": {

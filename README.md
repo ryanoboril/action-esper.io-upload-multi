@@ -18,7 +18,7 @@ This action uploads one or more APKs to esper.io using [Esper.io API](https://ap
 
 ### `files`
 
-**Required** APK file(s) to upload, can be a directory or a string array of file paths
+**Required** Directory of APK file(s) to upload
 
 ## Outputs
 
@@ -35,17 +35,6 @@ with:
   apiKey: 'ESPER_IO_API_KEY'
   tenantId: 'ESPER_IO_TENANT_ID'
   files: './artifacts'
-```
-
-### OR
-
-```
-uses: actions/action-esper.io-upload-multi@v0.1
-with:
-  enterpriseId: 'ESPER_IO_ENTERPRISE_ID'
-  apiKey: 'ESPER_IO_API_KEY'
-  tenantId: 'ESPER_IO_TENANT_ID'
-  files: ['./artifacts/my-app-beta.apk', './artifacts/my-app-uat.apk']
 ```
 
 ## References

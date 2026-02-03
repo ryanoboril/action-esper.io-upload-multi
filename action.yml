@@ -12,7 +12,7 @@ inputs:
     description: 'Esper.io API Key'
     required: true
   files:
-    description: 'Folder containing APK files to upload, or an array of file names'
+    description: 'Folder containing APK files to upload'
     required: true
 outputs:
   uploadResult:
