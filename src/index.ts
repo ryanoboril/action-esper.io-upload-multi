@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import FormData = require('form-data');
@@ -74,9 +74,12 @@ async function run() {
     });
     core.error(JSON.stringify(result));
     core.setOutput('uploadResult', result.data);
-  } catch (err: any) {
+  } catch (err: unknown) {
+    if (err instanceof AxiosError) {
+      core.error(`Axios error response: ${JSON.stringify(err.response?.data)}`);
+    }
     core.error(JSON.stringify(err));
-    core.setFailed(err.message);
+    core.setFailed('it failed');
   }
 }
 
