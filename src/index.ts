@@ -56,18 +56,23 @@ async function run() {
       formData.append('app_file', fs.createReadStream(filePath)),
     );
 
+    const headers = {
+      ...formData.getHeaders(),
+      Authorization: `Bearer ${apiKey}`,
+      maxBodyLength: 200 * 1024 * 1024,
+      maxContentLength: 200 * 1024 * 1024,
+    };
+
+    core.error(`Form Data Headers: ${JSON.stringify(headers, null, 2)}`);
+    core.error(`Form Data (RAW): ${JSON.stringify(headers, null, 2)}`);
+
     // https://api.esper.io/tag/Application#operation/upload
     const result = await axios.post<{
       application: Record<string, string> | { id: string };
     }>(url, formData, {
-      headers: {
-        ...formData.getHeaders(),
-        Authorization: `Bearer ${apiKey}`,
-        maxBodyLength: 200 * 1024 * 1024,
-        maxContentLength: 200 * 1024 * 1024,
-      },
+      headers,
     });
-    core.error(JSON.stringify(result.data, null, 2));
+    core.error(JSON.stringify(result, null, 2));
     core.setOutput('uploadResult', result.data);
   } catch (err: any) {
     core.error(JSON.stringify(err, null, 2));
