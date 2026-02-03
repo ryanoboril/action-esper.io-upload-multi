@@ -52,19 +52,19 @@ async function run() {
     core.error(`Files to upload: ${filePaths.join(', ')}`);
 
     const formData = new FormData();
-    filePaths.forEach((filePath: string) =>
-      formData.append('app_file', fs.createReadStream(filePath)),
-    );
+    filePaths.forEach((filePath: string) => {
+      const fileName = path.basename(filePath);
+      formData.append(fileName, fs.createReadStream(filePath));
+    });
 
     const headers = {
       ...formData.getHeaders(),
       Authorization: `Bearer ${apiKey}`,
-      maxBodyLength: 200 * 1024 * 1024,
-      maxContentLength: 200 * 1024 * 1024,
+      //maxBodyLength: 200 * 1024 * 1024,
+      //maxContentLength: 200 * 1024 * 1024,
     };
 
-    core.error(`Form Data Headers: ${JSON.stringify(headers, null, 2)}`);
-    core.error(`Form Data (RAW): ${JSON.stringify(headers, null, 2)}`);
+    core.error(`Form Data Headers: ${JSON.stringify(headers)}`);
 
     // https://api.esper.io/tag/Application#operation/upload
     const result = await axios.post<{
