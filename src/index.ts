@@ -71,8 +71,6 @@ async function run() {
       headers: {
         ...formData.getHeaders(),
         Authorization: `Bearer ${apiKey}`,
-        maxBodyLength: 200 * 1024 * 1024,
-        maxContentLength: 200 * 1024 * 1024,
       },
     });
     core.error(JSON.stringify(result));
