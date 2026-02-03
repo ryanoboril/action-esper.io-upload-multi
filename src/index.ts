@@ -4,6 +4,25 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import FormData = require('form-data');
 
+const resolveWorkspace = (): string => {
+  const workspace = process.env.GITHUB_WORKSPACE;
+  if (!workspace) {
+    throw new Error('GITHUB_WORKSPACE is not set');
+  }
+  return workspace;
+};
+
+const resolveFilesPath = (filesInput: string): string => {
+  const workspace = resolveWorkspace();
+  const resolvedPath = path.isAbsolute(filesInput)
+    ? filesInput
+    : path.resolve(workspace, filesInput);
+  if (!fs.existsSync(resolvedPath)) {
+    throw new Error(`Files directory does not exist: ${resolvedPath}`);
+  }
+  return resolvedPath;
+};
+
 async function run() {
   try {
     const enterpriseId = core.getInput('enterpriseId');
@@ -11,22 +30,29 @@ async function run() {
     const apiKey = core.getInput('apiKey');
     const files = core.getInput('files');
 
+    const resolvedPath = resolveFilesPath(files);
+
     const url = `https://${tenantId}-api.esper.cloud/api/enterprise/${enterpriseId}/application/upload`;
     core.debug(`Esper.io endpoint ${url}`);
 
     let filePaths: string[] = [];
-    if (Array.isArray(files)) {
-      filePaths = files;
-    } else if (fs.statSync(files)?.isDirectory()) {
+    // if (Array.isArray(files)) {
+    //   filePaths = files;
+    // } else if (fs.statSync(files)?.isDirectory()) {
+    //   filePaths = fs
+    //     .readdirSync(files)
+    //     .map((fileName: string) => path.join(files, fileName));
+    // }
+    if (fs.statSync(resolvedPath)?.isDirectory()) {
       filePaths = fs
-        .readdirSync(files)
-        .map((fileName: string) => path.join(files, fileName));
+        .readdirSync(resolvedPath)
+        .map((fileName: string) => path.join(resolvedPath, fileName));
     }
     core.debug(`Files to upload: ${filePaths.join(', ')}`);
 
     const formData = new FormData();
     filePaths.forEach((filePath: string) =>
-      formData.append('app_file', fs.createReadStream(filePath))
+      formData.append('app_file', fs.createReadStream(filePath)),
     );
 
     // https://api.esper.io/tag/Application#operation/upload
