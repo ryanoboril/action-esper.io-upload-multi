@@ -26,7 +26,7 @@ async function run() {
     } else {
       throw new Error(`Files input must be a directory: ${filesInput}`);
     }
-    core.error(`Files to upload: ${filePaths.join(', ')}`);
+    core.debug(`Files to upload: ${filePaths.join(', ')}`);
 
     // This assumes up to 4 build variants, apps should be much smaller than this.
     const maxSize = 4 * 256 * 1024 * 1024; // max size is 256MB * 4 files = 1GB
