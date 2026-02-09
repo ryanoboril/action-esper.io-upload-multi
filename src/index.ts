@@ -46,14 +46,18 @@ async function run() {
     });
 
     const result = await axios.post(url, formData, config);
-    core.debug(JSON.stringify(result));
+    core.debug(JSON.stringify(result.data));
     core.setOutput('uploadResult', result.data);
   } catch (err: unknown) {
     if (err instanceof AxiosError) {
       core.error(`Axios error response: ${JSON.stringify(err.response?.data)}`);
     }
-    core.error(JSON.stringify(err));
-    core.setFailed((err as Error).message);
+    try {
+      core.error(JSON.stringify(err));
+    } catch (error) {
+      core.error(error as string);
+    }
+    core.setFailed((err as Error)?.message);
   }
 }
 

@@ -11,6 +11,9 @@ inputs:
   apiKey:
     description: 'Esper.io API Key'
     required: true
+  tenantId:
+    description: 'Esper.io tenant name'
+    required: true
   files:
     description: 'Folder containing APK files to upload'
     required: true

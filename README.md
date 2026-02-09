@@ -10,7 +10,7 @@ This action uploads one or more APKs to esper.io using [Esper.io API](https://ap
 
 ### `apiKey`
 
-**Required** API key to interact with esper.io API
+**Required** Esper.io API Key
 
 ### `tenantId`
 
@@ -18,7 +18,7 @@ This action uploads one or more APKs to esper.io using [Esper.io API](https://ap
 
 ### `files`
 
-**Required** Directory of APK file(s) to upload
+**Required** Folder containing APK files to upload
 
 ## Outputs
 
@@ -29,7 +29,7 @@ Result data from Esper.io APK upload operation
 ## Example usage
 
 ```
-uses: actions/action-esper.io-upload-multi@v0.1
+uses: ryanoboril/action-esper.io-upload-multi@v1
 with:
   enterpriseId: 'ESPER_IO_ENTERPRISE_ID'
   apiKey: 'ESPER_IO_API_KEY'
