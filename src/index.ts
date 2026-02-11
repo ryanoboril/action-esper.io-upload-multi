@@ -6,6 +6,8 @@ import FormData from 'form-data';
 
 async function run() {
   try {
+    core.setCommandEcho(true); // echo command output to CI logs
+
     const enterpriseId = core.getInput('enterpriseId');
     const tenantId = core.getInput('tenantId');
     const apiKey = core.getInput('apiKey');
@@ -14,7 +16,7 @@ async function run() {
     // https://api.esper.io/tag/Application#operation/upload
     // NOTE: 405 if we don't include trailing slash on the URL!
     const url = `https://${tenantId}-api.esper.cloud/api/enterprise/${enterpriseId}/application/upload/`;
-    core.debug(`Esper.io endpoint ${url}`);
+    core.info(`Esper.io endpoint ${url}`);
 
     let filePaths: string[] = [];
 
@@ -22,15 +24,12 @@ async function run() {
       filePaths = fs
         .readdirSync(filesInput)
         .map((fileName: string) => path.join(filesInput, fileName));
-      // handle array of file paths input
     } else {
-      throw new Error(`Files input must be a directory: ${filesInput}`);
+      throw new Error(`\`files\` input must be a directory: ${filesInput}`);
     }
-    core.debug(`Files to upload: ${filePaths.join(', ')}`);
+    core.info(`Files to upload: ${filePaths.join(', ')}`);
 
-    // This assumes up to 4 build variants, apps should be much smaller than this.
-    const maxSize = 4 * 256 * 1024 * 1024; // max size is 256MB * 4 files = 1GB
-
+    const maxSize = 2_000_000_000;
     const config: AxiosRequestConfig = {
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -39,15 +38,21 @@ async function run() {
       maxContentLength: maxSize,
     };
 
-    const formData = new FormData();
-    filePaths.forEach(async (filePath: string) => {
+    const uploadRequests = filePaths.map(async (filePath: string) => {
       const fileName = path.basename(filePath);
+      const formData = new FormData();
       formData.append('app_file', fs.createReadStream(filePath), fileName);
+      return axios.post(url, formData, config);
     });
 
-    const result = await axios.post(url, formData, config);
-    core.debug(JSON.stringify(result.data));
-    core.setOutput('uploadResult', result.data);
+    const results = await Promise.all(uploadRequests);
+
+    core.info('Upload operation completed');
+    core.info(JSON.stringify(results.map((result) => result.data)));
+    core.setOutput(
+      'uploadResult',
+      results.map((result) => result.data),
+    );
   } catch (err: unknown) {
     if (err instanceof AxiosError) {
       core.error(`Axios error response: ${JSON.stringify(err.response?.data)}`);
